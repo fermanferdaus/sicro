@@ -1,0 +1,36 @@
+<svg width="1080" height="1080" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+  <defs>
+    <!-- Sapphire Gradient -->
+    <linearGradient id="sapphire" x1="0" y1="0" x2="120" y2="100">
+      <stop offset="0%" stop-color="#1E3A8A"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+
+    <!-- Platinum Gradient -->
+    <linearGradient id="platinum" x1="0" y1="0" x2="120" y2="100">
+      <stop offset="0%" stop-color="#9CA3AF"/>
+      <stop offset="50%" stop-color="#E5E7EB"/>
+      <stop offset="100%" stop-color="#6B7280"/>
+    </linearGradient>
+  </defs>
+
+  <!-- O (Platinum Elegant) -->
+  <circle cx="40" cy="50" r="30"
+          stroke="url(#platinum)"
+          stroke-width="14"
+          fill="none"/>
+
+  <!-- S (Sapphire Premium) -->
+  <path d="
+    M85 25
+    C70 25 65 35 75 40
+    L95 50
+    C105 55 100 70 85 70
+    C75 70 70 65 68 60
+  "
+    stroke="url(#sapphire)"
+    stroke-width="14"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+</svg>
