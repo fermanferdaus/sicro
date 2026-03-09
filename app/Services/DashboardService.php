@@ -38,7 +38,7 @@ class DashboardService
             'recent_transactions' => Transaksi::with(['faktur', 'kasir'])
                 ->whereDate('tanggal', now()->toDateString())
                 ->orderByDesc('created_at')
-                ->limit(7)
+                ->limit($user->role === 'owner' ? 7 : 5)
                 ->get(),
         ];
 
