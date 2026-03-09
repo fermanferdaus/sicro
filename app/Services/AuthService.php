@@ -14,7 +14,7 @@ class AuthService
     {
         $user = User::where('username', $username)->first();
 
-        if (!$user) {
+        if (!$user || $user->username !== $username) {
             throw ValidationException::withMessages([
                 Fortify::username() => ['Username tidak ditemukan.'],
             ]);
@@ -32,6 +32,12 @@ class AuthService
     public function login(array $credentials)
     {
         if (!$token = JWTAuth::attempt($credentials)) {
+            return null;
+        }
+
+        $user = auth()->user();
+        if ($user && $user->username !== $credentials['username']) {
+            JWTAuth::invalidate($token);
             return null;
         }
 

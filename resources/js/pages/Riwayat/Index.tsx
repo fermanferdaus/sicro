@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Head, router, Link } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 import DataTable from '@/Components/Core/DataTable';
@@ -45,6 +45,7 @@ export default function Index({ transactions, filters }: Props) {
     const [filterType, setFilterType] = useState<
         'daily' | 'monthly' | 'period'
     >(filters.filter_type || 'monthly');
+    const filterTypeRef = useRef(filterType);
     const [startDate, setStartDate] = useState(filters.start_date || '');
     const [endDate, setEndDate] = useState(filters.end_date || '');
 
@@ -227,13 +228,13 @@ export default function Index({ transactions, filters }: Props) {
 
     const handleFilterTypeChange = (type: 'daily' | 'monthly' | 'period') => {
         setFilterType(type);
-        applyFilters(type, startDate, endDate);
+        filterTypeRef.current = type;
     };
 
     const handleDateChange = (start: string, end: string) => {
         setStartDate(start);
         setEndDate(end);
-        applyFilters(filterType, start, end);
+        applyFilters(filterTypeRef.current, start, end);
     };
 
     const handlePageChange = (url: string | null) => {

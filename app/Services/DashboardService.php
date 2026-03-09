@@ -35,6 +35,11 @@ class DashboardService
             'total_produk' => Produk::where('is_active', true)->count(),
             'total_omset' => (int) Transaksi::whereBetween('tanggal', [$startDate->toDateString(), $endDate->toDateString()])->sum('subtotal'),
             'sales_chart' => $chartData,
+            'recent_transactions' => Transaksi::with(['faktur', 'kasir'])
+                ->whereDate('tanggal', now()->toDateString())
+                ->orderByDesc('created_at')
+                ->limit(7)
+                ->get(),
         ];
 
         // Data khusus Owner

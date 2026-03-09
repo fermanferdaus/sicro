@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import MainLayout from '@/Layouts/MainLayout';
 import useAuth from '@/Hooks/useAuth';
 import DataTable from '@/Components/Core/DataTable';
@@ -51,6 +51,7 @@ export default function PengeluaranIndex({
     const [filterType, setFilterType] = useState<
         'daily' | 'monthly' | 'period'
     >(filters.filter_type || 'monthly');
+    const filterTypeRef = useRef(filterType);
     const [startDate, setStartDate] = useState(filters.start_date || '');
     const [endDate, setEndDate] = useState(filters.end_date || '');
 
@@ -80,12 +81,12 @@ export default function PengeluaranIndex({
     const handleDateChange = (start: string, end: string) => {
         setStartDate(start);
         setEndDate(end);
-        applyFilters(filterType, start, end, selectedCategory);
+        applyFilters(filterTypeRef.current, start, end, selectedCategory);
     };
 
     const handleFilterTypeChange = (type: 'daily' | 'monthly' | 'period') => {
         setFilterType(type);
-        applyFilters(type, startDate, endDate, selectedCategory);
+        filterTypeRef.current = type;
     };
 
     // Delete State

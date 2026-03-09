@@ -115,7 +115,7 @@ export default function ProfilIndex({ profil_data }: ProfilProps) {
                                                     )
                                                 }
                                                 className="w-full"
-                                                placeholder="Contoh: Sicro Coffee"
+                                                placeholder="Contoh: Sicro"
                                             />
                                             {errors.nama_store && (
                                                 <p className="mt-1 text-xs text-red-500">
@@ -140,7 +140,7 @@ export default function ProfilIndex({ profil_data }: ProfilProps) {
                                                     )
                                                 }
                                                 className="w-full"
-                                                placeholder="Nama Lengkap Owner"
+                                                placeholder="Nama Lengkap Pemilik"
                                             />
                                             {errors.nama_owner && (
                                                 <p className="mt-1 text-xs text-red-500">
@@ -170,7 +170,7 @@ export default function ProfilIndex({ profil_data }: ProfilProps) {
                                                     }
                                                     className="w-full pl-10"
                                                     rows={4}
-                                                    placeholder="Jl. Raya No. 123, Jakarta"
+                                                    placeholder="Jl. Pagar Alam No. 123, Bandar Lampung"
                                                 />
                                             </div>
                                             {errors.alamat && (
@@ -265,7 +265,7 @@ export default function ProfilIndex({ profil_data }: ProfilProps) {
                                                         )
                                                     }
                                                     className="w-full pl-10"
-                                                    placeholder="sicro.coffee"
+                                                    placeholder="sicro.official"
                                                 />
                                             </div>
                                             {errors.tiktok && (

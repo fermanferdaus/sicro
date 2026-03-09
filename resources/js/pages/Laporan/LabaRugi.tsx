@@ -264,6 +264,11 @@ export default function LabaRugi({ summary, details, filters }: LabaRugiProps) {
 
     const columns = [
         {
+            key: 'no',
+            label: 'No',
+            render: (_: Pengeluaran, index: number) => index + 1,
+        },
+        {
             key: 'tanggal',
             label: 'Tanggal',
             render: (item: Pengeluaran) => formatDateLong(item.tanggal),

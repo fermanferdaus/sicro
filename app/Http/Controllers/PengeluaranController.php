@@ -29,6 +29,14 @@ class PengeluaranController extends Controller
     public function index(Request $request)
     {
         $filters = $request->only(['kategori', 'filter_type', 'start_date', 'end_date']);
+
+        // Default to current month if no date filters provided
+        if (empty($filters['filter_type'])) {
+            $filters['filter_type'] = 'monthly';
+            $filters['start_date'] = now()->startOfMonth()->toDateString();
+            $filters['end_date'] = now()->endOfMonth()->toDateString();
+        }
+
         $pengeluaran = $this->pengeluaranService->getAll($filters);
 
         // Get unique categories for filter

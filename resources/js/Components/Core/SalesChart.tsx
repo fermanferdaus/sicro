@@ -61,11 +61,11 @@ export default function SalesChart({
                 </div>
             </div>
 
-            <div className="relative h-[350px] w-full">
+            <div className="relative h-[310px] w-full">
                 {width > 0 && (
                     <AreaChart
                         width={width}
-                        height={350}
+                        height={310}
                         data={data}
                         margin={{
                             top: 10,

@@ -22,21 +22,22 @@ export default function DateFilter({
     const handleTypeChange = (newType: FilterType) => {
         onFilterTypeChange(newType);
 
-        if (newType === 'monthly' || newType === 'period') {
-            // Adjust to full month range of the current startDate
-            const [year, month] = startDate.split('-').map(Number);
-            if (!isNaN(year) && !isNaN(month)) {
-                const lastDay = new Date(year, month, 0).getDate();
-                const formattedLastDay = lastDay.toString().padStart(2, '0');
-                const monthStr = startDate.substring(0, 7);
-                onDateChange(
-                    `${monthStr}-01`,
-                    `${monthStr}-${formattedLastDay}`,
-                );
-            }
-        } else if (newType === 'daily') {
-            // Adjust to just the startDate
-            onDateChange(startDate, startDate);
+        // Always reset to today/current month when switching modes
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
+        const todayStr = `${year}-${month}-${day}`;
+
+        if (newType === 'daily') {
+            onDateChange(todayStr, todayStr);
+        } else if (newType === 'monthly' || newType === 'period') {
+            const lastDay = new Date(year, today.getMonth() + 1, 0).getDate();
+            const formattedLastDay = lastDay.toString().padStart(2, '0');
+            onDateChange(
+                `${year}-${month}-01`,
+                `${year}-${month}-${formattedLastDay}`,
+            );
         }
     };
 
@@ -81,8 +82,8 @@ export default function DateFilter({
                     </button>
                 </div>
 
-                <div className="flex items-center gap-2">
-                    <Filter className="h-4 w-4 text-slate-400" />
+                <div className="flex items-center gap-3">
+                    <Filter className="h-5 w-5 text-slate-400" />
                     {filterType === 'daily' && (
                         <input
                             type="date"
@@ -90,7 +91,7 @@ export default function DateFilter({
                             onChange={(e) =>
                                 onDateChange(e.target.value, e.target.value)
                             }
-                            className="rounded-lg border-slate-200 text-sm font-medium text-slate-700 focus:border-[#ef5350] focus:ring-2 focus:ring-[#ef5350]/20"
+                            className="w-40 rounded-full border-2 border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 transition-colors focus:border-[#ef5350] focus:ring-0 focus:outline-none [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
                         />
                     )}
                     {filterType === 'monthly' && (
@@ -117,7 +118,7 @@ export default function DateFilter({
                                     `${val}-${formattedLastDay}`,
                                 );
                             }}
-                            className="rounded-lg border-slate-200 text-sm font-medium text-slate-700 focus:border-[#ef5350] focus:ring-2 focus:ring-[#ef5350]/20"
+                            className="w-48 rounded-full border-2 border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 transition-colors focus:border-[#ef5350] focus:ring-0 focus:outline-none [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
                         />
                     )}
                     {filterType === 'period' && (
@@ -128,16 +129,16 @@ export default function DateFilter({
                                 onChange={(e) =>
                                     onDateChange(e.target.value, endDate)
                                 }
-                                className="rounded-lg border-slate-200 text-sm font-medium text-slate-700 focus:border-[#ef5350] focus:ring-2 focus:ring-[#ef5350]/20"
+                                className="w-40 rounded-full border-2 border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 transition-colors focus:border-[#ef5350] focus:ring-0 focus:outline-none [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
                             />
-                            <span className="text-slate-400">-</span>
+                            <span className="font-bold text-slate-300">-</span>
                             <input
                                 type="date"
                                 value={endDate}
                                 onChange={(e) =>
                                     onDateChange(startDate, e.target.value)
                                 }
-                                className="rounded-lg border-slate-200 text-sm font-medium text-slate-700 focus:border-[#ef5350] focus:ring-2 focus:ring-[#ef5350]/20"
+                                className="w-40 rounded-full border-2 border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 transition-colors focus:border-[#ef5350] focus:ring-0 focus:outline-none [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
                             />
                         </div>
                     )}

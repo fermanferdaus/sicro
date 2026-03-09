@@ -115,7 +115,7 @@ export default function Sidebar({
             items: [
                 {
                     icon: ChartPie,
-                    label: 'Analisis Laporan',
+                    label: 'Laporan',
                     href: '/laporan',
                     active: url.startsWith('/laporan'),
                 },
