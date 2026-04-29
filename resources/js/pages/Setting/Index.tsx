@@ -5,8 +5,7 @@ import InputLabel from '@/Components/Form/InputLabel';
 import PrimaryButton from '@/Components/Form/PrimaryButton';
 import ImageUpload from '@/Components/Form/ImageUpload';
 import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
-import { FormEventHandler, useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { FormEventHandler, useState, useEffect } from 'react';
 
 export default function Setting() {
     const { auth } = usePage<any>().props;
@@ -19,11 +18,19 @@ export default function Setting() {
         nama_lengkap: user.nama_lengkap,
         password: '',
         password_confirmation: '',
-        foto_profile: null as File | string | null,
+        foto_profile: (user.foto_profile || null) as File | string | null,
         delete_foto_profile: false,
     });
 
     const [showKonfirmasi, setShowKonfirmasi] = useState(false);
+
+    useEffect(() => {
+        setData((prevData) => ({
+            ...prevData,
+            foto_profile: user.foto_profile || null,
+            delete_foto_profile: false,
+        }));
+    }, [user.foto_profile]);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -34,12 +41,7 @@ export default function Setting() {
         post(route('setting.update'), {
             onSuccess: () => {
                 setShowKonfirmasi(false);
-                reset(
-                    'password',
-                    'password_confirmation',
-                    'foto_profile',
-                    'delete_foto_profile',
-                );
+                reset('password', 'password_confirmation');
             },
         });
     };
@@ -66,12 +68,7 @@ export default function Setting() {
                     {/* Image Upload Component */}
                     <ImageUpload
                         label="Foto Profil"
-                        image={
-                            data.foto_profile ||
-                            (user.foto_profile && !data.delete_foto_profile
-                                ? user.foto_profile
-                                : null)
-                        }
+                        image={data.foto_profile}
                         onChange={(file) => {
                             setData((previousData) => ({
                                 ...previousData,

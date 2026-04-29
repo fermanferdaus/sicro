@@ -19,7 +19,7 @@ class UpdatePengeluaranRequest extends FormRequest
             'deskripsi' => 'nullable|string',
             'jumlah' => 'required|numeric|min:0',
             'tanggal' => 'required|date',
-            'bukti_path' => 'nullable|string',
+            'bukti_path' => 'required|string',
             'id_profil' => 'nullable|exists:profils,id_profil',
         ];
     }

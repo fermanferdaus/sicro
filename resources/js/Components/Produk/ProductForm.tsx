@@ -29,7 +29,7 @@ export default function ProductForm({
         harga_jual: produk?.harga_jual || 0,
         kategori: produk?.kategori || '',
         is_active: produk?.is_active ?? true,
-        gambar: null as File | string | null,
+        gambar: (produk?.gambar || null) as File | string | null,
         _method: isEdit ? 'PUT' : 'POST',
     });
 
@@ -79,9 +79,7 @@ export default function ProductForm({
                 {/* Image Upload Component */}
                 <ImageUpload
                     label="Gambar Produk"
-                    image={
-                        data.gambar || (isEdit ? produk?.gambar || null : null)
-                    }
+                    image={data.gambar}
                     onChange={(file) => setData('gambar', file)}
                     error={errors.gambar}
                     className="mb-8"

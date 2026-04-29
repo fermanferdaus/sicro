@@ -9,6 +9,7 @@ import ImageUpload from '@/Components/Form/ImageUpload';
 import SelectInput from '@/Components/Form/SelectInput';
 import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
 import { useState } from 'react';
+import { useToast } from '@/Components/Core/Toast';
 
 interface Pengeluaran {
     id_pengeluaran: string;
@@ -35,14 +36,21 @@ export default function PengeluaranForm({
         deskripsi: pengeluaran?.deskripsi || '',
         jumlah: pengeluaran?.jumlah || 0,
         tanggal: pengeluaran?.tanggal || new Date().toISOString().split('T')[0],
-        bukti_path: null as File | string | null,
+        bukti_path: (pengeluaran?.bukti_path || null) as File | string | null,
         _method: isEdit ? 'PUT' : 'POST',
     });
 
     const [showKonfirmasi, setShowKonfirmasi] = useState(false);
+    const { error: showErrorToast } = useToast();
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!data.bukti_path) {
+            showErrorToast('Gambar bukti pembayaran wajib diunggah.');
+            return;
+        }
+
         setShowKonfirmasi(true);
     };
 
@@ -88,13 +96,10 @@ export default function PengeluaranForm({
                     label={
                         <div className="flex items-center gap-1">
                             Bukti Pembayaran{' '}
-                            {!isEdit && <span className="text-red-500">*</span>}
+                            <span className="text-red-500">*</span>
                         </div>
                     }
-                    image={
-                        data.bukti_path ||
-                        (isEdit ? pengeluaran?.bukti_path || null : null)
-                    }
+                    image={data.bukti_path}
                     onChange={(file) => setData('bukti_path', file)}
                     error={errors.bukti_path}
                     className="mb-8"
