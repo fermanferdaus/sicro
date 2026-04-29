@@ -99,6 +99,9 @@ export default function PengeluaranIndex({
     const [isEditing, setIsEditing] = useState(false);
     const [itemToEdit, setItemToEdit] = useState<Pengeluaran | null>(null);
 
+    // Tambah Confirmation State
+    const [showTambahModal, setShowTambahModal] = useState(false);
+
     // Filter Logic
     const filteredData = pengeluaran.filter(
         (item) =>
@@ -261,7 +264,7 @@ export default function PengeluaranIndex({
                     </p>
                 </div>
                 <PrimaryButton
-                    onClick={() => router.get(route('pengeluaran.create'))}
+                    onClick={() => setShowTambahModal(true)}
                     className="w-fit gap-2"
                 >
                     <Plus className="h-4 w-4" />
@@ -332,12 +335,26 @@ export default function PengeluaranIndex({
                 onClose={() => setIsEditing(false)}
                 onConfirm={() => {
                     if (itemToEdit) {
-                        router.get(route('pengeluaran.edit', itemToEdit.id_pengeluaran));
+                        router.get(
+                            route(
+                                'pengeluaran.edit',
+                                itemToEdit.id_pengeluaran,
+                            ),
+                        );
                     }
                 }}
                 title="Edit Data Pengeluaran"
                 description={`Apakah Anda yakin ingin mengedit data pengeluaran "${itemToEdit?.judul}"?`}
                 confirmText="Edit"
+            />
+
+            <ModalKonfirmasi
+                isOpen={showTambahModal}
+                onClose={() => setShowTambahModal(false)}
+                onConfirm={() => router.get(route('pengeluaran.create'))}
+                title="Tambah Pengeluaran Baru"
+                description="Apakah Anda yakin ingin menambahkan data pengeluaran baru?"
+                confirmText="Tambah"
             />
         </MainLayout>
     );

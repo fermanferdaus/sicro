@@ -37,18 +37,14 @@ export default function ProductForm({
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (isEdit) {
-            setShowKonfirmasi(true);
-            return;
-        }
-
-        const url = route('produk.store');
-        post(url);
+        setShowKonfirmasi(true);
     };
 
-    const handleConfirmEdit = () => {
-        const url = route('produk.update', produk?.id_produk);
+    const handleConfirm = () => {
+        const url = isEdit
+            ? route('produk.update', produk?.id_produk)
+            : route('produk.store');
+
         post(url, {
             onSuccess: () => setShowKonfirmasi(false),
         });
@@ -190,9 +186,17 @@ export default function ProductForm({
                 <ModalKonfirmasi
                     isOpen={showKonfirmasi}
                     onClose={() => setShowKonfirmasi(false)}
-                    onConfirm={handleConfirmEdit}
-                    title="Simpan Perubahan Produk"
-                    description="Apakah Anda yakin ingin menyimpan perubahan pada data produk ini?"
+                    onConfirm={handleConfirm}
+                    title={
+                        isEdit
+                            ? 'Simpan Perubahan Produk'
+                            : 'Tambah Produk Baru'
+                    }
+                    description={
+                        isEdit
+                            ? 'Apakah Anda yakin ingin menyimpan perubahan pada data produk ini?'
+                            : 'Apakah Anda yakin ingin menambahkan produk baru ini?'
+                    }
                     isProcessing={processing}
                 />
             </form>

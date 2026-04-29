@@ -45,6 +45,9 @@ export default function GajiIndex({ gaji, filters = {} }: GajiIndexProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [itemToEdit, setItemToEdit] = useState<Gaji | null>(null);
 
+    // Tambah Confirmation State
+    const [showTambahModal, setShowTambahModal] = useState(false);
+
     const columns = [
         {
             key: 'no',
@@ -224,7 +227,7 @@ export default function GajiIndex({ gaji, filters = {} }: GajiIndexProps) {
                 </div>
 
                 <PrimaryButton
-                    onClick={() => router.get(route('gaji.create'))}
+                    onClick={() => setShowTambahModal(true)}
                     className="flex w-fit items-center gap-2"
                 >
                     <Plus className="h-4 w-4" />
@@ -264,6 +267,15 @@ export default function GajiIndex({ gaji, filters = {} }: GajiIndexProps) {
                 title="Edit Pengaturan Gaji"
                 description={`Apakah Anda yakin ingin mengedit pengaturan gaji untuk "${itemToEdit?.pegawai?.nama_lengkap}"?`}
                 confirmText="Edit"
+            />
+
+            <ModalKonfirmasi
+                isOpen={showTambahModal}
+                onClose={() => setShowTambahModal(false)}
+                onConfirm={() => router.get(route('gaji.create'))}
+                title="Tambah Pengaturan Gaji"
+                description="Apakah Anda yakin ingin menambahkan pengaturan gaji baru?"
+                confirmText="Tambah"
             />
         </MainLayout>
     );

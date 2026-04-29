@@ -51,6 +51,9 @@ export default function PegawaiIndex({ pegawai, filters }: PegawaiIndexProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [itemToEdit, setItemToEdit] = useState<Pegawai | null>(null);
 
+    // Tambah Confirmation State
+    const [showTambahModal, setShowTambahModal] = useState(false);
+
     const columns = [
         {
             key: 'no',
@@ -243,7 +246,7 @@ export default function PegawaiIndex({ pegawai, filters }: PegawaiIndexProps) {
                 </div>
 
                 <PrimaryButton
-                    onClick={() => router.get(route('pegawai.create'))}
+                    onClick={() => setShowTambahModal(true)}
                     className="flex w-fit items-center gap-2"
                 >
                     <Plus className="h-4 w-4" />
@@ -277,12 +280,23 @@ export default function PegawaiIndex({ pegawai, filters }: PegawaiIndexProps) {
                 onClose={() => setIsEditing(false)}
                 onConfirm={() => {
                     if (itemToEdit) {
-                        router.get(route('pegawai.edit', itemToEdit.id_pegawai));
+                        router.get(
+                            route('pegawai.edit', itemToEdit.id_pegawai),
+                        );
                     }
                 }}
                 title="Edit Data Pegawai"
                 description={`Apakah Anda yakin ingin mengedit data pegawai "${itemToEdit?.nama_lengkap}"?`}
                 confirmText="Edit"
+            />
+
+            <ModalKonfirmasi
+                isOpen={showTambahModal}
+                onClose={() => setShowTambahModal(false)}
+                onConfirm={() => router.get(route('pegawai.create'))}
+                title="Tambah Pegawai Baru"
+                description="Apakah Anda yakin ingin menambahkan data pegawai baru?"
+                confirmText="Tambah"
             />
         </MainLayout>
     );

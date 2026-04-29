@@ -44,6 +44,9 @@ export default function AccountIndex({ accounts, filters }: AccountIndexProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [itemToEdit, setItemToEdit] = useState<Account | null>(null);
 
+    // Tambah Confirmation State
+    const [showTambahModal, setShowTambahModal] = useState(false);
+
     const columns = [
         {
             key: 'no',
@@ -237,7 +240,7 @@ export default function AccountIndex({ accounts, filters }: AccountIndexProps) {
                 </div>
 
                 <PrimaryButton
-                    onClick={() => router.get(route('account.create'))}
+                    onClick={() => setShowTambahModal(true)}
                     className="flex w-fit items-center gap-2"
                 >
                     <Plus className="h-4 w-4" />
@@ -277,6 +280,15 @@ export default function AccountIndex({ accounts, filters }: AccountIndexProps) {
                 title="Edit Akun Pengguna"
                 description={`Apakah Anda yakin ingin mengedit akun "${itemToEdit?.username}"?`}
                 confirmText="Edit"
+            />
+
+            <ModalKonfirmasi
+                isOpen={showTambahModal}
+                onClose={() => setShowTambahModal(false)}
+                onConfirm={() => router.get(route('account.create'))}
+                title="Tambah Akun Baru"
+                description="Apakah Anda yakin ingin menambahkan akun pengguna baru?"
+                confirmText="Tambah"
             />
         </MainLayout>
     );

@@ -58,6 +58,13 @@ export default function BonusIndex({ bonus, filters }: BonusIndexProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [itemToEdit, setItemToEdit] = useState<Bonus | null>(null);
 
+    // Tambah Confirmation State
+    const [showTambahModal, setShowTambahModal] = useState(false);
+
+    // Status Confirmation State
+    const [showStatusModal, setShowStatusModal] = useState(false);
+    const [itemToToggle, setItemToToggle] = useState<Bonus | null>(null);
+
     // Filter effect
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -152,7 +159,10 @@ export default function BonusIndex({ bonus, filters }: BonusIndexProps) {
             label: 'Status',
             render: (item: Bonus) => (
                 <button
-                    onClick={() => handleToggleStatus(item)}
+                    onClick={() => {
+                        setItemToToggle(item);
+                        setShowStatusModal(true);
+                    }}
                     className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold transition-all ${
                         item.status === 'disetujui'
                             ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
@@ -192,14 +202,22 @@ export default function BonusIndex({ bonus, filters }: BonusIndexProps) {
         },
     ];
 
-    const handleToggleStatus = (item: Bonus) => {
-        const newStatus = item.status === 'pending' ? 'disetujui' : 'pending';
+    const handleToggleStatus = () => {
+        if (!itemToToggle) return;
+        const newStatus =
+            itemToToggle.status === 'pending' ? 'disetujui' : 'pending';
         router.patch(
-            route('bonus.update-status', item.id_bonus),
+            route('bonus.update-status', itemToToggle.id_bonus),
             {
                 status: newStatus,
             },
-            { preserveScroll: true },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setShowStatusModal(false);
+                    setItemToToggle(null);
+                },
+            },
         );
     };
 
@@ -276,7 +294,7 @@ export default function BonusIndex({ bonus, filters }: BonusIndexProps) {
                 </div>
 
                 <PrimaryButton
-                    onClick={() => router.get(route('bonus.create'))}
+                    onClick={() => setShowTambahModal(true)}
                     className="flex w-fit items-center gap-2"
                 >
                     <Plus className="h-4 w-4" />
@@ -329,6 +347,37 @@ export default function BonusIndex({ bonus, filters }: BonusIndexProps) {
                 title="Edit Data Bonus"
                 description={`Apakah Anda yakin ingin mengedit bonus "${itemToEdit?.judul}" untuk "${itemToEdit?.pegawai?.nama_lengkap}"?`}
                 confirmText="Edit"
+            />
+
+            <ModalKonfirmasi
+                isOpen={showTambahModal}
+                onClose={() => setShowTambahModal(false)}
+                onConfirm={() => router.get(route('bonus.create'))}
+                title="Tambah Bonus Baru"
+                description="Apakah Anda yakin ingin menambahkan bonus baru?"
+                confirmText="Tambah"
+            />
+
+            <ModalKonfirmasi
+                isOpen={showStatusModal}
+                onClose={() => {
+                    setShowStatusModal(false);
+                    setItemToToggle(null);
+                }}
+                onConfirm={handleToggleStatus}
+                title={
+                    itemToToggle?.status === 'pending'
+                        ? 'Setujui Bonus'
+                        : 'Batalkan Persetujuan'
+                }
+                description={
+                    itemToToggle?.status === 'pending'
+                        ? `Apakah Anda yakin ingin menyetujui bonus "${itemToToggle?.judul}" untuk "${itemToToggle?.pegawai?.nama_lengkap}"?`
+                        : `Apakah Anda yakin ingin membatalkan persetujuan bonus "${itemToToggle?.judul}" untuk "${itemToToggle?.pegawai?.nama_lengkap}"?`
+                }
+                confirmText={
+                    itemToToggle?.status === 'pending' ? 'Setujui' : 'Batalkan'
+                }
             />
         </MainLayout>
     );

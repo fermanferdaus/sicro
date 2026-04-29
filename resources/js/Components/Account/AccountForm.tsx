@@ -86,17 +86,15 @@ export default function AccountForm({
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (isEdit) {
-            setShowKonfirmasi(true);
-            return;
-        }
-
-        post(route('account.store'));
+        setShowKonfirmasi(true);
     };
 
-    const handleConfirmEdit = () => {
-        post(route('account.update', account?.id_user), {
+    const handleConfirm = () => {
+        const url = isEdit
+            ? route('account.update', account?.id_user)
+            : route('account.store');
+
+        post(url, {
             onSuccess: () => setShowKonfirmasi(false),
         });
     };
@@ -394,9 +392,15 @@ export default function AccountForm({
                 <ModalKonfirmasi
                     isOpen={showKonfirmasi}
                     onClose={() => setShowKonfirmasi(false)}
-                    onConfirm={handleConfirmEdit}
-                    title="Simpan Perubahan Akun"
-                    description="Apakah Anda yakin ingin menyimpan perubahan pada data akun pengguna ini?"
+                    onConfirm={handleConfirm}
+                    title={
+                        isEdit ? 'Simpan Perubahan Akun' : 'Tambah Akun Baru'
+                    }
+                    description={
+                        isEdit
+                            ? 'Apakah Anda yakin ingin menyimpan perubahan pada data akun pengguna ini?'
+                            : 'Apakah Anda yakin ingin menambahkan akun pengguna baru ini?'
+                    }
                     isProcessing={processing}
                 />
             </form>

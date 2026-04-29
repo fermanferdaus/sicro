@@ -51,19 +51,15 @@ export default function PegawaiForm({
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (isEdit) {
-            setShowKonfirmasi(true);
-            return;
-        }
-
-        post(route('pegawai.store'), {
-            forceFormData: true,
-        });
+        setShowKonfirmasi(true);
     };
 
-    const handleConfirmEdit = () => {
-        post(route('pegawai.update', pegawai?.id_pegawai), {
+    const handleConfirm = () => {
+        const url = isEdit
+            ? route('pegawai.update', pegawai?.id_pegawai)
+            : route('pegawai.store');
+
+        post(url, {
             forceFormData: true,
             onSuccess: () => setShowKonfirmasi(false),
         });
@@ -249,9 +245,17 @@ export default function PegawaiForm({
                 <ModalKonfirmasi
                     isOpen={showKonfirmasi}
                     onClose={() => setShowKonfirmasi(false)}
-                    onConfirm={handleConfirmEdit}
-                    title="Simpan Perubahan Pegawai"
-                    description="Apakah Anda yakin ingin menyimpan perubahan pada data pegawai ini?"
+                    onConfirm={handleConfirm}
+                    title={
+                        isEdit
+                            ? 'Simpan Perubahan Pegawai'
+                            : 'Tambah Pegawai Baru'
+                    }
+                    description={
+                        isEdit
+                            ? 'Apakah Anda yakin ingin menyimpan perubahan pada data pegawai ini?'
+                            : 'Apakah Anda yakin ingin menambahkan data pegawai baru ini?'
+                    }
                     isProcessing={processing}
                 />
             </form>

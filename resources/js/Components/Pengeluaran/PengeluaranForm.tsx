@@ -43,19 +43,15 @@ export default function PengeluaranForm({
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (isEdit) {
-            setShowKonfirmasi(true);
-            return;
-        }
-
-        post(route('pengeluaran.store'), {
-            forceFormData: true,
-        });
+        setShowKonfirmasi(true);
     };
 
-    const handleConfirmEdit = () => {
-        post(route('pengeluaran.update', pengeluaran?.id_pengeluaran), {
+    const handleConfirm = () => {
+        const url = isEdit
+            ? route('pengeluaran.update', pengeluaran?.id_pengeluaran)
+            : route('pengeluaran.store');
+
+        post(url, {
             forceFormData: true,
             onSuccess: () => setShowKonfirmasi(false),
         });
@@ -254,9 +250,17 @@ export default function PengeluaranForm({
                 <ModalKonfirmasi
                     isOpen={showKonfirmasi}
                     onClose={() => setShowKonfirmasi(false)}
-                    onConfirm={handleConfirmEdit}
-                    title="Simpan Perubahan Pengeluaran"
-                    description="Apakah Anda yakin ingin menyimpan perubahan pada data pengeluaran ini?"
+                    onConfirm={handleConfirm}
+                    title={
+                        isEdit
+                            ? 'Simpan Perubahan Pengeluaran'
+                            : 'Tambah Pengeluaran Baru'
+                    }
+                    description={
+                        isEdit
+                            ? 'Apakah Anda yakin ingin menyimpan perubahan pada data pengeluaran ini?'
+                            : 'Apakah Anda yakin ingin menambahkan data pengeluaran baru ini?'
+                    }
                     isProcessing={processing}
                 />
             </form>

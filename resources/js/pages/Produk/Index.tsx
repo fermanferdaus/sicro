@@ -3,6 +3,7 @@ import { Head, router } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 import SummaryCard from '@/Components/Core/SummaryCard';
 import ModalHapus from '@/Components/Core/ModalHapus';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
 import ProductCard from '@/Components/Produk/ProductCard';
 import CategoryFilter from '@/Components/Core/CategoryFilter';
 import PrimaryButton from '@/Components/Form/PrimaryButton';
@@ -55,6 +56,9 @@ export default function Index({ produk, total_produk, filters }: Props) {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [productToDelete, setProductToDelete] = useState<Produk | null>(null);
 
+    // Tambah Confirmation State
+    const [showTambahModal, setShowTambahModal] = useState(false);
+
     // No server-side search effect needed
 
     const openDeleteModal = (item: Produk) => {
@@ -97,7 +101,7 @@ export default function Index({ produk, total_produk, filters }: Props) {
                 </div>
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                     <PrimaryButton
-                        onClick={() => router.get(route('produk.create'))}
+                        onClick={() => setShowTambahModal(true)}
                         className="w-fit gap-2 font-bold"
                     >
                         <Plus className="h-4 w-4" />
@@ -157,6 +161,15 @@ export default function Index({ produk, total_produk, filters }: Props) {
                     </p>
                 </div>
             )}
+
+            <ModalKonfirmasi
+                isOpen={showTambahModal}
+                onClose={() => setShowTambahModal(false)}
+                onConfirm={() => router.get(route('produk.create'))}
+                title="Tambah Produk Baru"
+                description="Apakah Anda yakin ingin menambahkan produk baru?"
+                confirmText="Tambah"
+            />
         </MainLayout>
     );
 }

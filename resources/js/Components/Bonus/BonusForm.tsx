@@ -71,19 +71,19 @@ export default function BonusForm({
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (isEdit) {
-            setShowKonfirmasi(true);
-            return;
-        }
-
-        post(route('bonus.store'));
+        setShowKonfirmasi(true);
     };
 
-    const handleConfirmEdit = () => {
-        put(route('bonus.update', bonus?.id_bonus), {
-            onSuccess: () => setShowKonfirmasi(false),
-        });
+    const handleConfirm = () => {
+        if (isEdit) {
+            put(route('bonus.update', bonus?.id_bonus), {
+                onSuccess: () => setShowKonfirmasi(false),
+            });
+        } else {
+            post(route('bonus.store'), {
+                onSuccess: () => setShowKonfirmasi(false),
+            });
+        }
     };
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -316,9 +316,15 @@ export default function BonusForm({
                 <ModalKonfirmasi
                     isOpen={showKonfirmasi}
                     onClose={() => setShowKonfirmasi(false)}
-                    onConfirm={handleConfirmEdit}
-                    title="Simpan Perubahan Bonus"
-                    description="Apakah Anda yakin ingin menyimpan perubahan pada data bonus pegawai ini?"
+                    onConfirm={handleConfirm}
+                    title={
+                        isEdit ? 'Simpan Perubahan Bonus' : 'Tambah Bonus Baru'
+                    }
+                    description={
+                        isEdit
+                            ? 'Apakah Anda yakin ingin menyimpan perubahan pada data bonus pegawai ini?'
+                            : 'Apakah Anda yakin ingin menambahkan bonus baru ini?'
+                    }
                     isProcessing={processing}
                 />
             </form>

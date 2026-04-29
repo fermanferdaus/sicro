@@ -66,19 +66,19 @@ export default function GajiForm({
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (isEdit) {
-            setShowKonfirmasi(true);
-            return;
-        }
-
-        post(route('gaji.store'));
+        setShowKonfirmasi(true);
     };
 
-    const handleConfirmEdit = () => {
-        put(route('gaji.update', gaji?.id_gaji), {
-            onSuccess: () => setShowKonfirmasi(false),
-        });
+    const handleConfirm = () => {
+        if (isEdit) {
+            put(route('gaji.update', gaji?.id_gaji), {
+                onSuccess: () => setShowKonfirmasi(false),
+            });
+        } else {
+            post(route('gaji.store'), {
+                onSuccess: () => setShowKonfirmasi(false),
+            });
+        }
     };
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -270,9 +270,17 @@ export default function GajiForm({
                 <ModalKonfirmasi
                     isOpen={showKonfirmasi}
                     onClose={() => setShowKonfirmasi(false)}
-                    onConfirm={handleConfirmEdit}
-                    title="Simpan Perubahan Gaji"
-                    description="Apakah Anda yakin ingin menyimpan perubahan pada pengaturan gaji ini?"
+                    onConfirm={handleConfirm}
+                    title={
+                        isEdit
+                            ? 'Simpan Perubahan Gaji'
+                            : 'Tambah Pengaturan Gaji Baru'
+                    }
+                    description={
+                        isEdit
+                            ? 'Apakah Anda yakin ingin menyimpan perubahan pada pengaturan gaji ini?'
+                            : 'Apakah Anda yakin ingin menambahkan pengaturan gaji baru ini?'
+                    }
                     isProcessing={processing}
                 />
             </form>
