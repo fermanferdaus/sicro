@@ -7,6 +7,7 @@ import { formatRupiah } from '@/lib/utils';
 import ImageUpload from '@/Components/Form/ImageUpload';
 import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
 import { useState } from 'react';
+import { useToast } from '@/Components/Core/Toast';
 
 interface ProductFormProps {
     produk?: {
@@ -34,6 +35,7 @@ export default function ProductForm({
     });
 
     const [showKonfirmasi, setShowKonfirmasi] = useState(false);
+    const { error: showErrorToast } = useToast();
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -47,6 +49,14 @@ export default function ProductForm({
 
         post(url, {
             onSuccess: () => setShowKonfirmasi(false),
+            onError: (errs) => {
+                setShowKonfirmasi(false);
+                if (errs.nama_produk) {
+                    showErrorToast(errs.nama_produk);
+                } else {
+                    showErrorToast('Gagal menyimpan produk. Periksa kembali input Anda.');
+                }
+            },
         });
     };
 

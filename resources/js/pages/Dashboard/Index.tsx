@@ -59,19 +59,21 @@ export default function Dashboard({
                                 value={total_transaksi}
                                 icon={ShoppingCart}
                                 gradient="from-blue-500 to-blue-600"
-                                cardBgClass="bg-blue-50"
+                                cardBgClass="bg-white"
                             />
                             <SummaryCard
                                 title="Total Produk Aktif"
                                 value={total_produk}
                                 icon={Package}
                                 gradient="from-green-500 to-green-600"
+                                cardBgClass="bg-white"
                             />
                             <SummaryCard
                                 title="Total Omset"
                                 value={formatRupiah(total_omset)}
                                 icon={Banknote}
                                 gradient="from-purple-500 to-purple-600"
+                                cardBgClass="bg-white"
                             />
                         </div>
 

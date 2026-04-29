@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Produk;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreProdukRequest extends FormRequest
 {
@@ -14,7 +15,14 @@ class StoreProdukRequest extends FormRequest
     public function rules()
     {
         return [
-            'nama_produk' => 'required|string|max:255',
+            'nama_produk' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('produks', 'nama_produk')->where(function ($query) {
+                    return $query->where('kategori', request('kategori'));
+                }),
+            ],
             'harga_jual' => 'required|numeric|min:0',
             'gambar' => 'nullable|string', // Temporary image path or existing path
             'kategori' => 'nullable|string|max:255',
@@ -28,6 +36,7 @@ class StoreProdukRequest extends FormRequest
             'nama_produk.required' => 'Nama produk wajib diisi.',
             'nama_produk.string' => 'Nama produk harus berupa teks.',
             'nama_produk.max' => 'Nama produk maksimal 255 karakter.',
+            'nama_produk.unique' => 'Produk sudah ada',
             'harga_jual.required' => 'Harga jual wajib diisi.',
             'harga_jual.numeric' => 'Harga jual harus berupa angka.',
             'harga_jual.min' => 'Harga jual minimal 0.',
