@@ -7,6 +7,8 @@ import { ArrowLeft } from 'lucide-react';
 import { formatRupiah } from '@/lib/utils';
 import ImageUpload from '@/Components/Form/ImageUpload';
 import SelectInput from '@/Components/Form/SelectInput';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
+import { useState } from 'react';
 
 interface Pengeluaran {
     id_pengeluaran: string;
@@ -37,14 +39,25 @@ export default function PengeluaranForm({
         _method: isEdit ? 'PUT' : 'POST',
     });
 
+    const [showKonfirmasi, setShowKonfirmasi] = useState(false);
+
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        const url = isEdit
-            ? route('pengeluaran.update', pengeluaran?.id_pengeluaran)
-            : route('pengeluaran.store');
 
-        post(url, {
+        if (isEdit) {
+            setShowKonfirmasi(true);
+            return;
+        }
+
+        post(route('pengeluaran.store'), {
             forceFormData: true,
+        });
+    };
+
+    const handleConfirmEdit = () => {
+        post(route('pengeluaran.update', pengeluaran?.id_pengeluaran), {
+            forceFormData: true,
+            onSuccess: () => setShowKonfirmasi(false),
         });
     };
 
@@ -237,6 +250,15 @@ export default function PengeluaranForm({
                         {processing ? 'Menyimpan...' : 'Simpan'}
                     </PrimaryButton>
                 </div>
+
+                <ModalKonfirmasi
+                    isOpen={showKonfirmasi}
+                    onClose={() => setShowKonfirmasi(false)}
+                    onConfirm={handleConfirmEdit}
+                    title="Simpan Perubahan Pengeluaran"
+                    description="Apakah Anda yakin ingin menyimpan perubahan pada data pengeluaran ini?"
+                    isProcessing={processing}
+                />
             </form>
         </div>
     );

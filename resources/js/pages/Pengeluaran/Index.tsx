@@ -3,6 +3,7 @@ import MainLayout from '@/Layouts/MainLayout';
 import useAuth from '@/Hooks/useAuth';
 import DataTable from '@/Components/Core/DataTable';
 import ModalHapus from '@/Components/Core/ModalHapus';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
 import { Head, Link, router } from '@inertiajs/react';
 import { formatRupiah, formatDateLong } from '@/lib/utils';
 import { Plus } from 'lucide-react';
@@ -93,6 +94,10 @@ export default function PengeluaranIndex({
     const [isDeleting, setIsDeleting] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<Pengeluaran | null>(null);
     const [isProcessingDelete, setIsProcessingDelete] = useState(false);
+
+    // Edit Confirmation State
+    const [isEditing, setIsEditing] = useState(false);
+    const [itemToEdit, setItemToEdit] = useState<Pengeluaran | null>(null);
 
     // Filter Logic
     const filteredData = pengeluaran.filter(
@@ -210,11 +215,10 @@ export default function PengeluaranIndex({
             label: 'Aksi',
             render: (item: Pengeluaran) => (
                 <TableAction
-                    onEdit={() =>
-                        router.get(
-                            route('pengeluaran.edit', item.id_pengeluaran),
-                        )
-                    }
+                    onEdit={() => {
+                        setItemToEdit(item);
+                        setIsEditing(true);
+                    }}
                     onDelete={() => handleDeleteClick(item)}
                 />
             ),
@@ -321,6 +325,19 @@ export default function PengeluaranIndex({
                 title="Hapus Pengeluaran"
                 description={`Apakah Anda yakin ingin menghapus data pengeluaran "${itemToDelete?.judul}"?`}
                 isProcessing={isProcessingDelete}
+            />
+
+            <ModalKonfirmasi
+                isOpen={isEditing}
+                onClose={() => setIsEditing(false)}
+                onConfirm={() => {
+                    if (itemToEdit) {
+                        router.get(route('pengeluaran.edit', itemToEdit.id_pengeluaran));
+                    }
+                }}
+                title="Edit Data Pengeluaran"
+                description={`Apakah Anda yakin ingin mengedit data pengeluaran "${itemToEdit?.judul}"?`}
+                confirmText="Edit"
             />
         </MainLayout>
     );

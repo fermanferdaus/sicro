@@ -5,6 +5,8 @@ import PrimaryButton from '@/Components/Form/PrimaryButton';
 import { ArrowLeft } from 'lucide-react';
 import { formatRupiah } from '@/lib/utils';
 import ImageUpload from '@/Components/Form/ImageUpload';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
+import { useState } from 'react';
 
 interface ProductFormProps {
     produk?: {
@@ -31,13 +33,25 @@ export default function ProductForm({
         _method: isEdit ? 'PUT' : 'POST',
     });
 
+    const [showKonfirmasi, setShowKonfirmasi] = useState(false);
+
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        const url = isEdit
-            ? route('produk.update', produk?.id_produk)
-            : route('produk.store');
 
+        if (isEdit) {
+            setShowKonfirmasi(true);
+            return;
+        }
+
+        const url = route('produk.store');
         post(url);
+    };
+
+    const handleConfirmEdit = () => {
+        const url = route('produk.update', produk?.id_produk);
+        post(url, {
+            onSuccess: () => setShowKonfirmasi(false),
+        });
     };
 
     const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -172,6 +186,15 @@ export default function ProductForm({
                               : 'Simpan'}
                     </PrimaryButton>
                 </div>
+
+                <ModalKonfirmasi
+                    isOpen={showKonfirmasi}
+                    onClose={() => setShowKonfirmasi(false)}
+                    onConfirm={handleConfirmEdit}
+                    title="Simpan Perubahan Produk"
+                    description="Apakah Anda yakin ingin menyimpan perubahan pada data produk ini?"
+                    isProcessing={processing}
+                />
             </form>
         </div>
     );

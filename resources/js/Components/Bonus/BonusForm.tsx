@@ -6,6 +6,7 @@ import PrimaryButton from '@/Components/Form/PrimaryButton';
 import { ArrowLeft } from 'lucide-react';
 import { formatRupiah } from '@/lib/utils';
 import { useEffect, useRef, useState } from 'react';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
 
 interface Pegawai {
     id_pegawai: string;
@@ -66,17 +67,23 @@ export default function BonusForm({
             document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    const [showKonfirmasi, setShowKonfirmasi] = useState(false);
+
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        const url = isEdit
-            ? route('bonus.update', bonus?.id_bonus)
-            : route('bonus.store');
 
         if (isEdit) {
-            put(url);
-        } else {
-            post(url);
+            setShowKonfirmasi(true);
+            return;
         }
+
+        post(route('bonus.store'));
+    };
+
+    const handleConfirmEdit = () => {
+        put(route('bonus.update', bonus?.id_bonus), {
+            onSuccess: () => setShowKonfirmasi(false),
+        });
     };
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -305,6 +312,15 @@ export default function BonusForm({
                         {processing ? 'Menyimpan...' : 'Simpan'}
                     </PrimaryButton>
                 </div>
+
+                <ModalKonfirmasi
+                    isOpen={showKonfirmasi}
+                    onClose={() => setShowKonfirmasi(false)}
+                    onConfirm={handleConfirmEdit}
+                    title="Simpan Perubahan Bonus"
+                    description="Apakah Anda yakin ingin menyimpan perubahan pada data bonus pegawai ini?"
+                    isProcessing={processing}
+                />
             </form>
         </div>
     );

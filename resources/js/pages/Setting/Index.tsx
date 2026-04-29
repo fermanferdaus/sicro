@@ -4,7 +4,8 @@ import TextInput from '@/Components/Form/TextInput';
 import InputLabel from '@/Components/Form/InputLabel';
 import PrimaryButton from '@/Components/Form/PrimaryButton';
 import ImageUpload from '@/Components/Form/ImageUpload';
-import { FormEventHandler } from 'react';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
+import { FormEventHandler, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 
 export default function Setting() {
@@ -22,16 +23,24 @@ export default function Setting() {
         delete_foto_profile: false,
     });
 
+    const [showKonfirmasi, setShowKonfirmasi] = useState(false);
+
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+        setShowKonfirmasi(true);
+    };
+
+    const handleConfirmSave = () => {
         post(route('setting.update'), {
-            onSuccess: () =>
+            onSuccess: () => {
+                setShowKonfirmasi(false);
                 reset(
                     'password',
                     'password_confirmation',
                     'foto_profile',
                     'delete_foto_profile',
-                ),
+                );
+            },
         });
     };
 
@@ -217,6 +226,15 @@ export default function Setting() {
                             {processing ? 'Menyimpan...' : 'Simpan'}
                         </PrimaryButton>
                     </div>
+
+                    <ModalKonfirmasi
+                        isOpen={showKonfirmasi}
+                        onClose={() => setShowKonfirmasi(false)}
+                        onConfirm={handleConfirmSave}
+                        title="Simpan Pengaturan Akun"
+                        description="Apakah Anda yakin ingin menyimpan perubahan pada pengaturan akun Anda?"
+                        isProcessing={processing}
+                    />
                 </form>
             </div>
         </MainLayout>

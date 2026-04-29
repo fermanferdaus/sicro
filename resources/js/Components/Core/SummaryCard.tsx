@@ -6,6 +6,7 @@ interface SummaryCardProps {
     icon: React.ElementType;
     iconColorClass?: string;
     iconBgClass?: string;
+    cardBgClass?: string;
     gradient?: string;
 }
 
@@ -15,10 +16,16 @@ export default function SummaryCard({
     icon: Icon,
     iconColorClass = 'text-slate-600',
     iconBgClass = 'bg-slate-100',
+    cardBgClass = 'bg-white',
     gradient,
 }: SummaryCardProps) {
     return (
-        <div className="group relative overflow-hidden rounded-3xl border border-slate-100 bg-white p-7 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)]">
+        <div
+            className={cn(
+                'group relative overflow-hidden rounded-3xl border border-slate-100 p-7 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)]',
+                cardBgClass,
+            )}
+        >
             {/* Background Blur Patterns */}
             <div className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-slate-50 opacity-50 blur-3xl transition-all duration-700 group-hover:scale-150 group-hover:bg-slate-100" />
 

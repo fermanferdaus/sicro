@@ -2,6 +2,7 @@ import { useState } from 'react';
 import MainLayout from '@/Layouts/MainLayout';
 import DataTable from '@/Components/Core/DataTable';
 import ModalHapus from '@/Components/Core/ModalHapus';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
 import { Head, router } from '@inertiajs/react';
 import { Plus, User, ShieldCheck } from 'lucide-react';
 import PrimaryButton from '@/Components/Form/PrimaryButton';
@@ -38,6 +39,10 @@ export default function AccountIndex({ accounts, filters }: AccountIndexProps) {
     const [isDeleting, setIsDeleting] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<Account | null>(null);
     const [isProcessingDelete, setIsProcessingDelete] = useState(false);
+
+    // Edit Confirmation State
+    const [isEditing, setIsEditing] = useState(false);
+    const [itemToEdit, setItemToEdit] = useState<Account | null>(null);
 
     const columns = [
         {
@@ -132,9 +137,10 @@ export default function AccountIndex({ accounts, filters }: AccountIndexProps) {
             label: 'Aksi',
             render: (item: Account) => (
                 <TableAction
-                    onEdit={() =>
-                        router.get(route('account.edit', item.id_user))
-                    }
+                    onEdit={() => {
+                        setItemToEdit(item);
+                        setIsEditing(true);
+                    }}
                     onDelete={() => {
                         setItemToDelete(item);
                         setIsDeleting(true);
@@ -258,6 +264,19 @@ export default function AccountIndex({ accounts, filters }: AccountIndexProps) {
                 title="Hapus Akun"
                 description={`Apakah Anda yakin ingin menghapus akun "${itemToDelete?.username}"? Tindakan ini akan mencabut akses sistem untuk pengguna ini.`}
                 isProcessing={isProcessingDelete}
+            />
+
+            <ModalKonfirmasi
+                isOpen={isEditing}
+                onClose={() => setIsEditing(false)}
+                onConfirm={() => {
+                    if (itemToEdit) {
+                        router.get(route('account.edit', itemToEdit.id_user));
+                    }
+                }}
+                title="Edit Akun Pengguna"
+                description={`Apakah Anda yakin ingin mengedit akun "${itemToEdit?.username}"?`}
+                confirmText="Edit"
             />
         </MainLayout>
     );

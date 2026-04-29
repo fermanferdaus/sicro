@@ -6,6 +6,7 @@ import PrimaryButton from '@/Components/Form/PrimaryButton';
 import DataTable from '@/Components/Core/DataTable';
 import { formatRupiah } from '@/lib/utils';
 import ModalHapus from '@/Components/Core/ModalHapus';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
 import TableAction from '@/Components/Core/TableAction';
 import MonthFilter from '@/Components/Core/MonthFilter';
 
@@ -52,6 +53,10 @@ export default function BonusIndex({ bonus, filters }: BonusIndexProps) {
     const [isDeleting, setIsDeleting] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<Bonus | null>(null);
     const [isProcessingDelete, setIsProcessingDelete] = useState(false);
+
+    // Edit Confirmation State
+    const [isEditing, setIsEditing] = useState(false);
+    const [itemToEdit, setItemToEdit] = useState<Bonus | null>(null);
 
     // Filter effect
     useEffect(() => {
@@ -173,9 +178,10 @@ export default function BonusIndex({ bonus, filters }: BonusIndexProps) {
             label: 'Aksi',
             render: (item: Bonus) => (
                 <TableAction
-                    onEdit={() =>
-                        router.get(route('bonus.edit', item.id_bonus))
-                    }
+                    onEdit={() => {
+                        setItemToEdit(item);
+                        setIsEditing(true);
+                    }}
                     onDelete={() => {
                         setItemToDelete(item);
                         setIsDeleting(true);
@@ -310,6 +316,19 @@ export default function BonusIndex({ bonus, filters }: BonusIndexProps) {
                 title="Hapus Bonus"
                 description={`Apakah Anda yakin ingin menghapus bonus "${itemToDelete?.judul}" untuk "${itemToDelete?.pegawai?.nama_lengkap}"?`}
                 isProcessing={isProcessingDelete}
+            />
+
+            <ModalKonfirmasi
+                isOpen={isEditing}
+                onClose={() => setIsEditing(false)}
+                onConfirm={() => {
+                    if (itemToEdit) {
+                        router.get(route('bonus.edit', itemToEdit.id_bonus));
+                    }
+                }}
+                title="Edit Data Bonus"
+                description={`Apakah Anda yakin ingin mengedit bonus "${itemToEdit?.judul}" untuk "${itemToEdit?.pegawai?.nama_lengkap}"?`}
+                confirmText="Edit"
             />
         </MainLayout>
     );

@@ -7,6 +7,7 @@ import InputLabel from '@/Components/Form/InputLabel';
 import PrimaryButton from '@/Components/Form/PrimaryButton';
 import ImageUpload from '@/Components/Form/ImageUpload';
 import SearchUnavailable from '@/Components/Core/SearchUnavailable';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
 import { FormEventHandler } from 'react';
 import { Store, MapPin, Phone, Instagram, Music2 } from 'lucide-react';
 
@@ -36,12 +37,16 @@ export default function ProfilIndex({ profil_data }: ProfilProps) {
         delete_logo: false,
     });
 
+    const [showKonfirmasi, setShowKonfirmasi] = useState(false);
+
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+        setShowKonfirmasi(true);
+    };
+
+    const handleConfirmSave = () => {
         post(route('profil.update'), {
-            onSuccess: () => {
-                // router.reload();
-            },
+            onSuccess: () => setShowKonfirmasi(false),
         });
     };
 
@@ -295,6 +300,15 @@ export default function ProfilIndex({ profil_data }: ProfilProps) {
                                     {processing ? 'Menyimpan...' : 'Simpan'}
                                 </PrimaryButton>
                             </div>
+
+                            <ModalKonfirmasi
+                                isOpen={showKonfirmasi}
+                                onClose={() => setShowKonfirmasi(false)}
+                                onConfirm={handleConfirmSave}
+                                title="Simpan Perubahan Profil Toko"
+                                description="Apakah Anda yakin ingin menyimpan perubahan pada profil toko ini?"
+                                isProcessing={processing}
+                            />
                         </form>
                     </>
                 )}

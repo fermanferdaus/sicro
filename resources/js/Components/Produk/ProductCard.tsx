@@ -3,6 +3,7 @@ import { router } from '@inertiajs/react';
 import { cn, formatRupiah } from '@/lib/utils';
 import { Switch } from '@headlessui/react';
 import TableAction from '@/Components/Core/TableAction';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
 
 interface Product {
     id_produk: string;
@@ -29,6 +30,7 @@ export default function ProductCard({
     onClick,
 }: ProductCardProps) {
     const [isArchived, setIsArchived] = useState(!product.is_active);
+    const [showEditConfirm, setShowEditConfirm] = useState(false);
 
     // Sync state with props in case the parent component (Inertia) reloads the data
     useEffect(() => {
@@ -169,12 +171,19 @@ export default function ProductCard({
 
                         {/* Actions */}
                         <TableAction
-                            onEdit={() =>
-                                router.get(
-                                    route('produk.edit', product.id_produk),
-                                )
-                            }
+                            onEdit={() => setShowEditConfirm(true)}
                             onDelete={() => onDelete?.(product)}
+                        />
+
+                        <ModalKonfirmasi
+                            isOpen={showEditConfirm}
+                            onClose={() => setShowEditConfirm(false)}
+                            onConfirm={() => {
+                                router.get(route('produk.edit', product.id_produk));
+                            }}
+                            title="Edit Produk"
+                            description={`Apakah Anda yakin ingin mengedit produk "${product.nama_produk}"?`}
+                            confirmText="Edit"
                         />
                     </div>
                 )}

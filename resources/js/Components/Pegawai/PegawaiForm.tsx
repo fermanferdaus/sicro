@@ -5,6 +5,8 @@ import TextArea from '@/Components/Form/TextArea';
 import PrimaryButton from '@/Components/Form/PrimaryButton';
 import SelectInput from '@/Components/Form/SelectInput';
 import { ArrowLeft } from 'lucide-react';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
+import { useState } from 'react';
 
 interface UserAccount {
     id_user: string;
@@ -45,14 +47,25 @@ export default function PegawaiForm({
         _method: isEdit ? 'PUT' : 'POST',
     });
 
+    const [showKonfirmasi, setShowKonfirmasi] = useState(false);
+
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        const url = isEdit
-            ? route('pegawai.update', pegawai?.id_pegawai)
-            : route('pegawai.store');
 
-        post(url, {
+        if (isEdit) {
+            setShowKonfirmasi(true);
+            return;
+        }
+
+        post(route('pegawai.store'), {
             forceFormData: true,
+        });
+    };
+
+    const handleConfirmEdit = () => {
+        post(route('pegawai.update', pegawai?.id_pegawai), {
+            forceFormData: true,
+            onSuccess: () => setShowKonfirmasi(false),
         });
     };
 
@@ -232,6 +245,15 @@ export default function PegawaiForm({
                         {processing ? 'Menyimpan...' : 'Simpan'}
                     </PrimaryButton>
                 </div>
+
+                <ModalKonfirmasi
+                    isOpen={showKonfirmasi}
+                    onClose={() => setShowKonfirmasi(false)}
+                    onConfirm={handleConfirmEdit}
+                    title="Simpan Perubahan Pegawai"
+                    description="Apakah Anda yakin ingin menyimpan perubahan pada data pegawai ini?"
+                    isProcessing={processing}
+                />
             </form>
         </div>
     );

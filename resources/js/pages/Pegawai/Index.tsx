@@ -3,6 +3,7 @@ import MainLayout from '@/Layouts/MainLayout';
 import useAuth from '@/Hooks/useAuth';
 import DataTable from '@/Components/Core/DataTable';
 import ModalHapus from '@/Components/Core/ModalHapus';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
 import { Head, Link, router } from '@inertiajs/react';
 import { Plus, User } from 'lucide-react';
 import PrimaryButton from '@/Components/Form/PrimaryButton';
@@ -45,6 +46,10 @@ export default function PegawaiIndex({ pegawai, filters }: PegawaiIndexProps) {
     const [isDeleting, setIsDeleting] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<Pegawai | null>(null);
     const [isProcessingDelete, setIsProcessingDelete] = useState(false);
+
+    // Edit Confirmation State
+    const [isEditing, setIsEditing] = useState(false);
+    const [itemToEdit, setItemToEdit] = useState<Pegawai | null>(null);
 
     const columns = [
         {
@@ -121,9 +126,10 @@ export default function PegawaiIndex({ pegawai, filters }: PegawaiIndexProps) {
             label: 'Aksi',
             render: (item: Pegawai) => (
                 <TableAction
-                    onEdit={() =>
-                        router.get(route('pegawai.edit', item.id_pegawai))
-                    }
+                    onEdit={() => {
+                        setItemToEdit(item);
+                        setIsEditing(true);
+                    }}
                     onDelete={() => {
                         setItemToDelete(item);
                         setIsDeleting(true);
@@ -264,6 +270,19 @@ export default function PegawaiIndex({ pegawai, filters }: PegawaiIndexProps) {
                 title="Hapus Pegawai"
                 description={`Apakah Anda yakin ingin menghapus data pegawai "${itemToDelete?.nama_lengkap}"?`}
                 isProcessing={isProcessingDelete}
+            />
+
+            <ModalKonfirmasi
+                isOpen={isEditing}
+                onClose={() => setIsEditing(false)}
+                onConfirm={() => {
+                    if (itemToEdit) {
+                        router.get(route('pegawai.edit', itemToEdit.id_pegawai));
+                    }
+                }}
+                title="Edit Data Pegawai"
+                description={`Apakah Anda yakin ingin mengedit data pegawai "${itemToEdit?.nama_lengkap}"?`}
+                confirmText="Edit"
             />
         </MainLayout>
     );

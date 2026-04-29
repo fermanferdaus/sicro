@@ -6,6 +6,7 @@ import SelectInput from '@/Components/Form/SelectInput';
 import { ArrowLeft } from 'lucide-react';
 import { formatRupiah } from '@/lib/utils';
 import { useEffect, useRef, useState } from 'react';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
 
 interface Pegawai {
     id_pegawai: string;
@@ -61,17 +62,23 @@ export default function GajiForm({
             document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    const [showKonfirmasi, setShowKonfirmasi] = useState(false);
+
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        const url = isEdit
-            ? route('gaji.update', gaji?.id_gaji)
-            : route('gaji.store');
 
         if (isEdit) {
-            put(url);
-        } else {
-            post(url);
+            setShowKonfirmasi(true);
+            return;
         }
+
+        post(route('gaji.store'));
+    };
+
+    const handleConfirmEdit = () => {
+        put(route('gaji.update', gaji?.id_gaji), {
+            onSuccess: () => setShowKonfirmasi(false),
+        });
     };
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -259,6 +266,15 @@ export default function GajiForm({
                         {processing ? 'Menyimpan...' : 'Simpan'}
                     </PrimaryButton>
                 </div>
+
+                <ModalKonfirmasi
+                    isOpen={showKonfirmasi}
+                    onClose={() => setShowKonfirmasi(false)}
+                    onConfirm={handleConfirmEdit}
+                    title="Simpan Perubahan Gaji"
+                    description="Apakah Anda yakin ingin menyimpan perubahan pada pengaturan gaji ini?"
+                    isProcessing={processing}
+                />
             </form>
         </div>
     );

@@ -59,6 +59,7 @@ export default function Dashboard({
                                 value={total_transaksi}
                                 icon={ShoppingCart}
                                 gradient="from-blue-500 to-blue-600"
+                                cardBgClass="bg-blue-50"
                             />
                             <SummaryCard
                                 title="Total Produk Aktif"

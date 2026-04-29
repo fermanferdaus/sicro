@@ -6,6 +6,7 @@ import SelectInput from '@/Components/Form/SelectInput';
 import { ArrowLeft } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useRef } from 'react';
+import ModalKonfirmasi from '@/Components/Core/ModalKonfirmasi';
 
 export interface Pegawai {
     id_pegawai: string;
@@ -81,13 +82,23 @@ export default function AccountForm({
             document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    const [showKonfirmasi, setShowKonfirmasi] = useState(false);
+
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        const url = isEdit
-            ? route('account.update', account?.id_user)
-            : route('account.store');
 
-        post(url);
+        if (isEdit) {
+            setShowKonfirmasi(true);
+            return;
+        }
+
+        post(route('account.store'));
+    };
+
+    const handleConfirmEdit = () => {
+        post(route('account.update', account?.id_user), {
+            onSuccess: () => setShowKonfirmasi(false),
+        });
     };
 
     return (
@@ -379,6 +390,15 @@ export default function AccountForm({
                         {processing ? 'Menyimpan...' : 'Simpan'}
                     </PrimaryButton>
                 </div>
+
+                <ModalKonfirmasi
+                    isOpen={showKonfirmasi}
+                    onClose={() => setShowKonfirmasi(false)}
+                    onConfirm={handleConfirmEdit}
+                    title="Simpan Perubahan Akun"
+                    description="Apakah Anda yakin ingin menyimpan perubahan pada data akun pengguna ini?"
+                    isProcessing={processing}
+                />
             </form>
         </div>
     );
