@@ -17,7 +17,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $app = $this->app;
+
+        if ($app->environment('production') && method_exists($app, 'usePublicPath')) {
+            $app->usePublicPath(realpath(base_path() . '/..'));
+        }
     }
 
     /**
