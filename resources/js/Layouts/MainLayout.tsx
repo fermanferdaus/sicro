@@ -106,9 +106,9 @@ export default function MainLayout({
                 {/* Page Content */}
                 <main
                     className={cn(
-                        'flex-1 text-slate-900',
+                        'flex-1 min-h-0 text-slate-900',
                         noPadding
-                            ? 'flex flex-col'
+                            ? 'flex flex-col overflow-hidden'
                             : 'overflow-y-auto p-6 pt-0',
                     )}
                 >

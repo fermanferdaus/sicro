@@ -31,6 +31,7 @@ export default function ProductCard({
 }: ProductCardProps) {
     const [isArchived, setIsArchived] = useState(!product.is_active);
     const [showEditConfirm, setShowEditConfirm] = useState(false);
+    const [imgError, setImgError] = useState(false);
 
     // Sync state with props in case the parent component (Inertia) reloads the data
     useEffect(() => {
@@ -86,10 +87,11 @@ export default function ProductCard({
                     </div>
                 )}
 
-                {product.gambar ? (
+                {product.gambar && !imgError ? (
                     <img
                         src={product.gambar}
                         alt={product.nama_produk}
+                        onError={() => setImgError(true)}
                         className={cn(
                             'h-full w-full object-cover transition-transform duration-500 group-hover:scale-110',
                             mode === 'admin' &&

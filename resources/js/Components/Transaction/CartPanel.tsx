@@ -72,12 +72,12 @@ export default function CartPanel({
 
             <div
                 className={cn(
-                    'fixed inset-x-0 bottom-0 z-50 flex h-[85vh] w-full flex-col rounded-t-3xl bg-white shadow-2xl transition-transform duration-300 lg:static lg:h-full lg:w-[320px] lg:shrink-0 lg:translate-y-0 lg:rounded-2xl lg:shadow-sm',
+                    'fixed inset-x-0 bottom-0 z-50 flex h-[85vh] w-full flex-col rounded-t-3xl bg-white shadow-2xl transition-transform duration-300 lg:static lg:h-full lg:min-h-0 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:translate-y-0 lg:rounded-2xl lg:shadow-sm lg:border lg:border-slate-200/80 overflow-hidden',
                     isMobileOpen ? 'translate-y-0' : 'translate-y-full',
                 )}
             >
                 {/* Header */}
-                <div className="flex items-center justify-between border-b border-slate-100 p-6 lg:border-none">
+                <div className="shrink-0 flex items-center justify-between border-b border-slate-100 p-4 lg:p-5">
                     <div className="flex items-center gap-3">
                         <div className="relative">
                             <ShoppingCart className="h-6 w-6 text-[#ef5350]" />
@@ -90,12 +90,14 @@ export default function CartPanel({
                         </h2>
                     </div>
                     <div className="flex items-center gap-2">
-                        <PrimaryButton
-                            onClick={onClearCart}
-                            className="h-8 border border-red-100 bg-white px-3 text-[11px] tracking-wider text-red-500 uppercase hover:bg-red-50"
-                        >
-                            Hapus
-                        </PrimaryButton>
+                        {cart.length > 0 && (
+                            <PrimaryButton
+                                onClick={onClearCart}
+                                className="h-8 border border-red-100 bg-white px-3 text-[11px] tracking-wider text-red-500 uppercase hover:bg-red-50"
+                            >
+                                Hapus
+                            </PrimaryButton>
+                        )}
                         <button
                             onClick={() => setIsMobileOpen(false)}
                             className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-500 hover:bg-slate-200 lg:hidden"
@@ -106,7 +108,7 @@ export default function CartPanel({
                 </div>
 
                 {/* Cart Items */}
-                <div className="custom-scrollbar flex-1 overflow-y-auto p-6">
+                <div className="no-scrollbar flex-1 min-h-0 overflow-y-auto p-4 lg:p-5">
                     {cart.length === 0 ? (
                         <div className="flex h-full flex-col items-center justify-center text-slate-400">
                             <ShoppingCart className="mb-4 h-12 w-12 opacity-20" />
@@ -188,13 +190,15 @@ export default function CartPanel({
                 </div>
 
                 {/* Payment Section */}
-                <PaymentSection
-                    key={paymentKey}
-                    subtotal={subtotal}
-                    grandTotal={grandTotal}
-                    disabled={cart.length === 0}
-                    onProcessPayment={onProcessPayment}
-                />
+                <div className="shrink-0">
+                    <PaymentSection
+                        key={paymentKey}
+                        subtotal={subtotal}
+                        grandTotal={grandTotal}
+                        disabled={cart.length === 0}
+                        onProcessPayment={onProcessPayment}
+                    />
+                </div>
             </div>
         </>
     );

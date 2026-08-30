@@ -181,9 +181,9 @@ export default function Transaksi({ products }: { products: Product[] }) {
                 data={receiptData}
             />
 
-            <div className="flex h-full flex-col gap-4 p-4 pt-1 md:gap-6 md:p-6 md:pt-0 lg:flex-row lg:pt-0">
+            <div className="flex h-full min-h-0 flex-1 flex-col gap-4 p-4 pt-1 md:gap-6 md:p-6 md:pt-0 lg:flex-row lg:pt-0 overflow-hidden">
                 {/* Product Grid */}
-                <div className="custom-scrollbar flex-1 overflow-y-auto pb-24 lg:pr-2 lg:pb-0">
+                <div className="no-scrollbar flex-1 min-h-0 overflow-y-auto pb-24 lg:pr-2 lg:pb-4">
                     {categories.length > 0 && (
                         <CategoryFilter
                             categories={categories}

@@ -38,9 +38,9 @@ export default function PaymentSection({
         paymentMethod === 'cash' && cashAmountValue < grandTotal;
 
     return (
-        <div className="space-y-5 border-t border-slate-200 bg-slate-50/50 p-6">
+        <div className="space-y-3.5 border-t border-slate-200 bg-slate-50/50 p-4 xl:p-5">
             {/* Method Selection */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2.5">
                 <PrimaryButton
                     onClick={() => {
                         setPaymentMethod('cash');
@@ -48,13 +48,13 @@ export default function PaymentSection({
                         setCashAmountValue(0);
                     }}
                     className={cn(
-                        'w-full gap-2 rounded-xl py-3 text-sm font-bold',
+                        'w-full gap-2 rounded-xl py-2.5 text-xs font-bold',
                         paymentMethod === 'cash'
-                            ? 'bg-[#ef5350] text-white shadow-lg shadow-[#ef5350]/30'
-                            : 'bg-white text-slate-500 hover:bg-slate-50',
+                            ? 'bg-[#ef5350] text-white shadow-md shadow-[#ef5350]/20'
+                            : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50',
                     )}
                 >
-                    <Banknote className="h-5 w-5" />
+                    <Banknote className="h-4 w-4" />
                     TUNAI
                 </PrimaryButton>
                 <PrimaryButton
@@ -64,25 +64,25 @@ export default function PaymentSection({
                         setCashAmountValue(0);
                     }}
                     className={cn(
-                        'w-full gap-2 rounded-xl py-3 text-sm font-bold',
+                        'w-full gap-2 rounded-xl py-2.5 text-xs font-bold',
                         paymentMethod === 'qris'
-                            ? 'bg-[#ef5350] text-white shadow-lg shadow-[#ef5350]/30'
-                            : 'bg-white text-slate-500 hover:bg-slate-50',
+                            ? 'bg-[#ef5350] text-white shadow-md shadow-[#ef5350]/20'
+                            : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50',
                     )}
                 >
-                    <CreditCard className="h-5 w-5" />
+                    <CreditCard className="h-4 w-4" />
                     QRIS
                 </PrimaryButton>
             </div>
 
             {/* Cash Input */}
             {paymentMethod === 'cash' && (
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                     <label className="text-[10px] font-extrabold tracking-wider text-slate-900 uppercase">
                         Uang Diterima
                     </label>
                     <div className="relative">
-                        <span className="absolute top-1/2 left-4 -translate-y-1/2 text-sm font-bold text-slate-500 transition-colors">
+                        <span className="absolute top-1/2 left-3 -translate-y-1/2 text-xs font-bold text-slate-500 transition-colors">
                             Rp
                         </span>
                         <input
@@ -104,44 +104,42 @@ export default function PaymentSection({
                                 );
                             }}
                             placeholder="0"
-                            className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-4 pl-10 text-base font-bold text-slate-900 transition-all placeholder:text-slate-300 focus:border-[#ef5350] focus:ring-4 focus:ring-[#ef5350]/10 focus:outline-none"
+                            className="w-full rounded-xl border border-slate-200 bg-white py-2 pr-3 pl-8 text-sm font-bold text-slate-900 transition-all placeholder:text-slate-300 focus:border-[#ef5350] focus:ring-2 focus:ring-[#ef5350]/20 focus:outline-none"
                         />
                     </div>
 
                     {/* Quick Amount Hints could go here */}
 
                     {change > 0 && (
-                        <div className="flex animate-in items-center justify-between text-sm font-bold text-green-700 fade-in slide-in-from-top-1">
+                        <div className="flex animate-in items-center justify-between text-xs font-bold text-green-700 fade-in slide-in-from-top-1">
                             <span>Kembalian</span>
-                            <span className="text-sm">
+                            <span className="text-xs">
                                 {formatRupiah(change)}
                             </span>
                         </div>
                     )}
                     {isInsufficient && cashAmountDisplay !== '' && (
-                        <div className="flex animate-in items-center gap-2 text-xs font-bold text-[#ef5350] fade-in slide-in-from-top-1">
+                        <div className="flex animate-in items-center gap-1.5 text-[11px] font-bold text-[#ef5350] fade-in slide-in-from-top-1">
                             <span>•</span>
-                            Nominal Kurang
+                            <span>Nominal Kurang</span>
                         </div>
                     )}
                 </div>
             )}
 
             {/* Totals */}
-            <div className="space-y-2">
-                <div className="-mt-3.5 flex justify-between font-black text-[#ef5350]">
-                    <span>Total Bayar</span>
-                    <span>{formatRupiah(grandTotal)}</span>
-                </div>
+            <div className="flex justify-between items-center font-black text-[#ef5350]">
+                <span className="text-xs font-bold text-slate-600">Total Bayar</span>
+                <span className="text-base font-extrabold">{formatRupiah(grandTotal)}</span>
             </div>
 
             {/* Process Button */}
             <PrimaryButton
                 onClick={handleProcess}
                 disabled={disabled || isInsufficient}
-                className="w-full gap-3 rounded-2xl py-4 text-sm font-black transition-all active:scale-[0.98]"
+                className="w-full gap-2 rounded-xl py-3 text-sm font-black transition-all active:scale-[0.98] disabled:opacity-40"
             >
-                <span>BAYAR</span>
+                <span>BAYAR SEKARANG</span>
             </PrimaryButton>
         </div>
     );

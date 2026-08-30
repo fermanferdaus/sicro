@@ -88,7 +88,7 @@ export default function Qris({ cart: cartJson, total }: QrisProps) {
                                     <h3 className="text-sm font-bold text-slate-900">
                                         Detail Pesanan
                                     </h3>
-                                    <div className="custom-scrollbar max-h-[300px] space-y-3 overflow-y-auto pr-2">
+                                    <div className="no-scrollbar max-h-[300px] space-y-3 overflow-y-auto pr-2">
                                         {cart.map((item, index) => (
                                             <div
                                                 key={index}
