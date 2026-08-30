@@ -22,7 +22,7 @@ export default function Topbar({
     // Global Search Logic
     const [localSearch, setLocalSearch] = useState(searchValue || '');
     const [showUnavailableMessage, setShowUnavailableMessage] = useState(false);
-    const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
         setLocalSearch(searchValue || '');
