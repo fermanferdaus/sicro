@@ -80,7 +80,7 @@ export default function Topbar({
     }, []);
 
     return (
-        <header className="sticky top-0 z-30 flex h-20 w-full items-center justify-between bg-slate-50/50 px-6 backdrop-blur-3xl transition-all duration-300 print:hidden">
+        <header className="sticky top-0 z-40 flex h-20 w-full items-center justify-between bg-slate-50/50 px-6 backdrop-blur-3xl transition-all duration-300 print:hidden">
             <div className="flex items-center gap-4">
                 {/* Mobile Toggle Button */}
                 <button
@@ -121,7 +121,7 @@ export default function Topbar({
             </div>
 
             {/* User Profile */}
-            <div className="relative" ref={menuRef}>
+            <div className="relative z-50" ref={menuRef}>
                 <div
                     className="flex cursor-pointer items-center gap-4 rounded-xl p-1.5 transition-colors hover:bg-slate-50"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -159,7 +159,7 @@ export default function Topbar({
 
                 {/* Dropdown Menu */}
                 {isMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-56 transform animate-in overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-2xl transition-all duration-300 fade-in slide-in-from-top-2">
+                    <div className="absolute right-0 top-full mt-2 w-56 z-50 transform animate-in overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-2xl transition-all duration-300 fade-in slide-in-from-top-2">
                         <div className="bg-slate-50 p-4">
                             <p className="text-sm font-bold text-slate-900">
                                 {auth?.user?.nama_lengkap}

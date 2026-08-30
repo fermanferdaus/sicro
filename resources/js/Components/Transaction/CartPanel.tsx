@@ -72,7 +72,7 @@ export default function CartPanel({
 
             <div
                 className={cn(
-                    'fixed inset-x-0 bottom-0 z-50 flex h-[85vh] w-full flex-col rounded-t-3xl bg-white shadow-2xl transition-transform duration-300 lg:static lg:h-full lg:min-h-0 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:translate-y-0 lg:rounded-2xl lg:shadow-sm lg:border lg:border-slate-200/80 overflow-hidden',
+                    'fixed inset-x-0 bottom-0 z-50 flex h-[85vh] w-full flex-col rounded-t-3xl bg-white shadow-2xl transition-transform duration-300 lg:static lg:z-10 lg:h-full lg:min-h-0 lg:w-[340px] xl:w-[380px] lg:shrink-0 lg:translate-y-0 lg:rounded-2xl lg:shadow-sm lg:border lg:border-slate-200/80 overflow-hidden',
                     isMobileOpen ? 'translate-y-0' : 'translate-y-full',
                 )}
             >
